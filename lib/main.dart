@@ -1,7 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'ffi.dart' if (dart.library.html) 'ffi_web.dart';
+import 'package:flutter_rust_bridge_template/pages/article_page.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:i18n_extension/i18n_widget.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'dart:io' as io;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'i18n.dart';
 
-void main() {
+/// This method initializes macos_window_utils and styles the window.
+Future<void> _configureMacosWindowUtils() async {
+  const config = MacosWindowUtilsConfig();
+  await config.apply();
+}
+
+Future<void> main() async {
+  if (!kIsWeb) {
+    if (io.Platform.isMacOS) {
+      await _configureMacosWindowUtils();
+    }
+  }
+
   runApp(const MyApp());
 }
 
@@ -11,138 +31,177 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return MacosApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('zh'),
+      ],
+      theme: MacosThemeData.light(),
+      darkTheme: MacosThemeData.dark(),
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      home: I18n(child: const MyHomePage()),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const MyHomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // These futures belong to the state and are only initialized once,
-  // in the initState method.
-  late Future<Platform> platform;
-  late Future<bool> isRelease;
+  int pageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MacosWindow(
+      sidebar: Sidebar(
+          minWidth: 200,
+          // TODO: Get and Set avatar on top.
+          top: const Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: CircleAvatar(),
+          ),
+          builder: (BuildContext context, ScrollController scrollController) {
+            return SidebarItems(
+              currentIndex: pageIndex,
+              onChanged: (i) {
+                setState(() => pageIndex = i);
+              },
+              itemSize: SidebarItemSize.large,
+              // TODO: Fetching item number and show.
+              items: [
+                SidebarItem(
+                  leading: const MacosIcon(Icons.article_outlined),
+                  label: Text('Article'.i18n),
+                  trailing: const Text('2'),
+                ),
+                SidebarItem(
+                  leading: const MacosIcon(Icons.menu_outlined),
+                  label: Text('Menu'.i18n),
+                  trailing: const Text('2'),
+                ),
+                SidebarItem(
+                  leading: const MacosIcon(FontAwesomeIcons.tag),
+                  label: Text('Tag'.i18n),
+                  trailing: const Text('2'),
+                ),
+                SidebarItem(
+                  leading: const MacosIcon(FontAwesomeIcons.shirt),
+                  label: Text('Theme'.i18n),
+                ),
+                SidebarItem(
+                  leading: const MacosIcon(FontAwesomeIcons.server),
+                  label: Text('Remote'.i18n),
+                ),
+              ],
+            );
+          },
+          // TODO: Add Buttons pressed function.
+          bottom: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PushButton(
+                  secondary: true,
+                  controlSize: ControlSize.large,
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                  // color: MacosColors.controlColor.darkColor,
+                  onPressed: () {},
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        MacosIcon(
+                          Icons.remove_red_eye,
+                          color: MacosTheme.of(context).typography.body.color,
+                        ),
+                        SizedBox.fromSize(
+                          size: const Size(10, 10),
+                        ),
+                        Text(
+                          'Preview'.i18n,
+                        ),
+                      ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PushButton(
+                  controlSize: ControlSize.large,
+                  borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                  // color: Colors.black54,
+                  onPressed: () {},
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const MacosIcon(
+                          Icons.sync,
+                          color: MacosColors.textColor,
+                        ),
+                        SizedBox.fromSize(
+                          size: const Size(10, 10),
+                        ),
+                        Text('Sync'.i18n),
+                      ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    MacosIconButton(
+                      icon: const MacosIcon(Icons.settings),
+                      onPressed: () {},
+                    ),
+                    Tooltip(
+                      message: 'Star Support Author'.i18n,
+                      child: MacosIconButton(
+                        icon: const FaIcon(FontAwesomeIcons.github),
+                        onPressed: () {},
+                      ),
+                    ),
+                    // TODO: Receive message from superidea or discusion, and display badge count shake animate when message unread.
+                    ShakeWidget(
+                      shakeConstant: ShakeVerticalConstant2(),
+                      duration: const Duration(seconds: 10),
+                      autoPlay: false,
+                      enableWebMouseHover: false,
+                      child: Badge(
+                        label: const Text('1'),
+                        child: MacosIconButton(
+                          icon: const MacosIcon(FontAwesomeIcons.message),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+      child: [
+        const ArticlePage(),
+      ][pageIndex],
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    platform = api.platform();
-    isRelease = api.rustReleaseMode();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("You're running on"),
-            // To render the results of a Future, a FutureBuilder is used which
-            // turns a Future into an AsyncSnapshot, which can be used to
-            // extract the error state, the loading state and the data if
-            // available.
-            //
-            // Here, the generic type that the FutureBuilder manages is
-            // explicitly named, because if omitted the snapshot will have the
-            // type of AsyncSnapshot<Object?>.
-            FutureBuilder<List<dynamic>>(
-              // We await two unrelated futures here, so the type has to be
-              // List<dynamic>.
-              future: Future.wait([platform, isRelease]),
-              builder: (context, snap) {
-                final style = Theme.of(context).textTheme.headlineMedium;
-                if (snap.error != null) {
-                  // An error has been encountered, so give an appropriate response and
-                  // pass the error details to an unobstructive tooltip.
-                  debugPrint(snap.error.toString());
-                  return Tooltip(
-                    message: snap.error.toString(),
-                    child: Text('Unknown OS', style: style),
-                  );
-                }
-
-                // Guard return here, the data is not ready yet.
-                final data = snap.data;
-                if (data == null) return const CircularProgressIndicator();
-
-                // Finally, retrieve the data expected in the same order provided
-                // to the FutureBuilder.future.
-                final Platform platform = data[0];
-                final release = data[1] ? 'Release' : 'Debug';
-                final text = const {
-                      Platform.Android: 'Android',
-                      Platform.Ios: 'iOS',
-                      Platform.MacApple: 'MacOS with Apple Silicon',
-                      Platform.MacIntel: 'MacOS',
-                      Platform.Windows: 'Windows',
-                      Platform.Unix: 'Unix',
-                      Platform.Wasm: 'the Web',
-                    }[platform] ??
-                    'Unknown OS';
-                return Text('$text ($release)', style: style);
-              },
-            )
-          ],
-        ),
-      ),
-    );
   }
 }
