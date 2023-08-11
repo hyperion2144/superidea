@@ -1,0 +1,55 @@
+<svg class="svg-canvas" viewBox="0 0 800 600" width="1600" height="1200" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!--滤镜-->
+        <defs></defs>
+
+        <!-- 背景 -->
+        <g id="background">
+            <rect x="0" y="0" fill="#ffffff" width="800" height="600"></rect>
+            
+          </g>
+
+        <!--元素-->
+        
+                <g id="shape_tDKxdcduu2" ref="shape_tDKxdcduu2" key="shape_tDKxdcduu2" transform="translate(253.75095387651996,119.44692255840499) rotate(0,146.24904612348,146.24904612348) scale(1,1)" style="opacity: 1;" filter="">
+                  <!--普通元素-->
+                  <svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="292.49809224696" height="292.49809224696" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" shapetype="ellipse" preserveAspectRatio="none" class="style-removed" data-parent="shape_tDKxdcduu2">
+	 <linearGradient class="" x1="0%" y1="0%" x2="0%" y2="100%" gradientTransform="translate(0.5,0.5) rotate(0) translate(-0.5,-0.5)">
+		<stop id="stop1_4NyrrmMbYp_c" offset="0%" class="" stop-color="#05a"></stop>
+		<stop id="stop2_dVjGsOQpgg_c" offset="100%" class="" stop-color="#0a5"></stop>
+	</linearGradient>
+
+	<radialGradient class="" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+		<stop offset="0%" class="" stop-color="#05a"></stop>
+		<stop offset="100%" class="" stop-color="#0a5"></stop>
+	</radialGradient>
+	<clipPath id="f_ellipse_o5UjVSZdth_c" class="">
+		<ellipse fill="none" class="" stroke="#ff4c1b" stroke-width="1" stroke-miterlimit="10" cx="50" cy="50" rx="50" ry="50"></ellipse>
+	</clipPath>
+	<ellipse class="" fill="#ff4c1b" opacity="1" cx="50" cy="50" rx="49" ry="49" stroke-width="0"></ellipse>
+	<ellipse class="" fill="none" stroke="#ff4c1b" stroke-width="0" stroke-miterlimit="10" cx="50" cy="50" rx="50" ry="50" clip-path="url(#f_ellipse_o5UjVSZdth_c)"></ellipse>
+</svg>
+                </g>
+                <g id="shape_QVcmHQPsq7" ref="shape_QVcmHQPsq7" key="shape_QVcmHQPsq7" transform="translate(52.482059283789965,-777.579672558405) rotate(0,349.15,1094.63275) scale(1,1)" style="opacity: 1;" filter="">
+                  <!--普通元素-->
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1244.6" height="2189.2655" viewBox="0 0 1244.6 2189.2655" data-parent="shape_QVcmHQPsq7"><g data-width="150.50565" transform="translate(273.89717499999995, 0)"><path d="M76.21-62.01L64.74-65.83Q52.72-69.93 42.88-74.16Q33.05-78.39 25.95-84.40Q18.85-90.41 14.89-98.74Q10.93-107.07 10.93-119.09L10.93-119.09Q10.93-142.31 28.82-156.24Q46.71-170.17 78.94-170.17L78.94-170.17Q90.69-170.17 100.79-168.53Q110.90-166.89 118.14-163.48Q125.38-160.07 129.47-154.74Q133.57-149.41 133.57-142.31L133.57-142.31Q133.57-135.21 130.29-130.16Q127.01-125.10 122.37-121.55L122.37-121.55Q116.36-125.38 106.26-128.24Q96.15-131.11 84.13-131.11L84.13-131.11Q71.84-131.11 66.10-127.70Q60.37-124.28 60.37-119.09L60.37-119.09Q60.37-115.00 63.92-112.40Q67.47-109.81 74.57-107.62L74.57-107.62L89.05-102.98Q114.72-94.78 128.52-82.08Q142.31-69.38 142.31-47.53L142.31-47.53Q142.31-24.31 124.01-9.97Q105.71 4.37 70.20 4.37L70.20 4.37Q57.63 4.37 46.85 2.32Q36.06 0.27 28.00-3.69Q19.94-7.65 15.43-13.52Q10.93-19.39 10.93-27.04L10.93-27.04Q10.93-34.96 15.57-40.56Q20.21-46.16 25.68-49.17L25.68-49.17Q33.32-43.16 44.39-38.79Q55.45-34.42 68.56-34.42L68.56-34.42Q81.95-34.42 87.41-38.51Q92.87-42.61 92.87-48.07L92.87-48.07Q92.87-53.54 88.50-56.41Q84.13-59.27 76.21-62.01L76.21-62.01Z" transform="translate(0 1143.13275) " fill="rgb(255, 255, 255)" stroke="rgb(255, 255, 255)" stroke-width="0.455" data-glyph-w="150.50565" data-glyph-h="549.5778" data-glyph-ascender="323.68275" data-glyph-descender="-225.89505"></path></g></svg>
+                </g>
+                <g id="shape_dTulsl9mQK" ref="shape_dTulsl9mQK" key="shape_dTulsl9mQK" transform="translate(467.49208121836995,159.85733106082506) rotate(0,17.812619323672,17.812619323672) scale(1,1)" style="opacity: 1;" filter="">
+                  <!--普通元素-->
+                  <svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35.625238647344" height="35.625238647344" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" shapetype="ellipse" preserveAspectRatio="none" class="style-removed" data-parent="shape_dTulsl9mQK">
+	 <linearGradient class="" x1="0%" y1="0%" x2="0%" y2="100%" gradientTransform="translate(0.5,0.5) rotate(0) translate(-0.5,-0.5)">
+		<stop id="stop1_blWpR6owon_c" offset="0%" class="" stop-color="#05a"></stop>
+		<stop id="stop2_2WMJdCPnIG_c" offset="100%" class="" stop-color="#0a5"></stop>
+	</linearGradient>
+
+	<radialGradient class="" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+		<stop offset="0%" class="" stop-color="#05a"></stop>
+		<stop offset="100%" class="" stop-color="#0a5"></stop>
+	</radialGradient>
+	<clipPath id="f_ellipse_HiB3cgO7t4_c" class="">
+		<ellipse fill="none" class="" stroke="#dddddd" stroke-width="1" stroke-miterlimit="10" cx="50" cy="50" rx="50" ry="50"></ellipse>
+	</clipPath>
+	<ellipse class="" fill="#ffffff" opacity="1" cx="50" cy="50" rx="49" ry="49" stroke-width="0"></ellipse>
+	<ellipse class="" fill="none" stroke="#dddddd" stroke-width="0" stroke-miterlimit="10" cx="50" cy="50" rx="50" ry="50" clip-path="url(#f_ellipse_HiB3cgO7t4_c)"></ellipse>
+</svg>
+                </g>
+      </svg>
