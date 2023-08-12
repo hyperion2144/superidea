@@ -1,12 +1,13 @@
+import 'package:animations/animations.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/i18n.dart';
+import 'package:superidea/i18n.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:macos_ui/macos_ui.dart';
 
-import 'package:flutter_rust_bridge_template/ffi.dart'
-    if (dart.library.html) 'package:flutter_rust_bridge_template/ffi_web.dart';
+import 'package:superidea/ffi.dart'
+    if (dart.library.html) 'package:superidea/ffi_web.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage({super.key});
@@ -15,11 +16,12 @@ class ArticlePage extends StatefulWidget {
   State<ArticlePage> createState() => _ArticlePageState();
 }
 
-class _ArticlePageState extends State<ArticlePage> {
+class _ArticlePageState extends State<ArticlePage>
+    with SingleTickerProviderStateMixin {
   late Future<Platform> platform;
   late Future<bool> isRelease;
+  late AnimationController _controller;
 
-  bool _inSearch = false;
   final List<int> _selectedItems = [];
 
   @override
@@ -28,6 +30,35 @@ class _ArticlePageState extends State<ArticlePage> {
 
     platform = api.platform();
     isRelease = api.rustReleaseMode();
+    _controller = AnimationController(
+      value: 0,
+      duration: const Duration(milliseconds: 150),
+      reverseDuration: const Duration(milliseconds: 75),
+      vsync: this,
+    )..addStatusListener((status) {
+        setState(() {
+          // setState needs to be called to trigger a rebuild because
+          // the 'HIDE FAB'/'SHOW FAB' button needs to be updated based
+          // the latest value of [_controller.status].
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool get _isAnimationRunningForwardsOrComplete {
+    switch (_controller.status) {
+      case AnimationStatus.forward:
+      case AnimationStatus.completed:
+        return true;
+      case AnimationStatus.reverse:
+      case AnimationStatus.dismissed:
+        return false;
+    }
   }
 
   @override
@@ -95,43 +126,61 @@ class _ArticlePageState extends State<ArticlePage> {
         ),
         actions: [
           // TODO: Search article.
-
           CustomToolbarItem(
             inToolbarBuilder: (context) {
-              return _inSearch
-                  ? SizedBox(
-                      width: 200,
-                      child: Focus(
-                        onFocusChange: (focus) =>
-                            setState(() => _inSearch = focus),
-                        child: MacosTextField(
-                          autofocus: true,
-                          autocorrect: true,
-                          placeholder: searchTitle,
-                          suffix: const MacosIcon(CupertinoIcons.search),
-                        ),
-                      ),
-                    )
-                  : Tooltip(
-                      message: searchTitle,
-                      child: MacosIconButton(
-                        icon: MacosIconTheme(
-                          data: MacosTheme.of(context).iconTheme.copyWith(
-                                color: MacosTheme.of(context)
-                                    .brightness
-                                    .resolve(
-                                      const Color.fromRGBO(0, 0, 0, 0.5),
-                                      const Color.fromRGBO(255, 255, 255, 0.5),
-                                    ),
-                              ),
-                          child: const MacosIcon(
-                            CupertinoIcons.search,
-                            size: 20,
+              return Visibility(
+                visible: _controller.status == AnimationStatus.dismissed,
+                child: Tooltip(
+                  message: searchTitle,
+                  child: MacosIconButton(
+                    icon: MacosIconTheme(
+                      data: MacosTheme.of(context).iconTheme.copyWith(
+                            color: MacosTheme.of(context).brightness.resolve(
+                                  const Color.fromRGBO(0, 0, 0, 0.5),
+                                  const Color.fromRGBO(255, 255, 255, 0.5),
+                                ),
                           ),
-                        ),
-                        onPressed: () => setState(() => _inSearch = !_inSearch),
+                      child: const MacosIcon(
+                        CupertinoIcons.search,
+                        size: 20,
                       ),
-                    );
+                    ),
+                    onPressed: () {
+                      _controller.forward();
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+          CustomToolbarItem(
+            inToolbarBuilder: (context) {
+              return AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return FadeScaleTransition(
+                    animation: _controller,
+                    child: child,
+                  );
+                },
+                child: Visibility(
+                  visible: _controller.status != AnimationStatus.dismissed,
+                  child: SizedBox(
+                    width: 200,
+                    child: Focus(
+                      onFocusChange: (focus) {
+                        if (!focus) _controller.reverse();
+                      },
+                      child: MacosTextField(
+                        autofocus: true,
+                        autocorrect: true,
+                        placeholder: searchTitle,
+                        suffix: const MacosIcon(CupertinoIcons.search),
+                      ),
+                    ),
+                  ),
+                ),
+              );
             },
           ),
           // TODO: Add new article, convert to the new article page.
@@ -248,10 +297,10 @@ class _ArticleTileState extends State<ArticleTile> {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Badge(
-          backgroundColor: MacosColors.black,
-          isLabelVisible: widget.hide,
-          offset: Offset(widget.hide && widget.top ? -58:-20, 0),
-          label: const Text('HIDE'),
+        backgroundColor: MacosColors.black,
+        isLabelVisible: widget.hide,
+        offset: Offset(widget.hide && widget.top ? -58 : -20, 0),
+        label: const Text('HIDE'),
         child: Badge(
           backgroundColor: MacosColors.black,
           isLabelVisible: widget.top,

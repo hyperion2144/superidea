@@ -1,4 +1,4 @@
-name: flutter_rust_bridge_template
+name: superidea
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -48,6 +48,10 @@ dependencies:
   date_format: ^2.0.7
   flutter_svg: ^2.0.7
   provider: ^6.0.5
+  toggle_switch: ^2.1.0
+  dropdown_button2: ^2.3.7
+  flutter_reorderable_list: ^1.3.1
+
 
 dev_dependencies:
   flutter_test:

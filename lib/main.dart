@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/pages/article_page.dart';
-import 'package:flutter_rust_bridge_template/theme.dart';
+import 'package:superidea/pages/article_page.dart';
+import 'package:superidea/pages/menu_page.dart';
+import 'package:superidea/theme.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -88,6 +89,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
 
+  List<Widget> pageList = <Widget>[
+    const ArticlePage(),
+    const MenuPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MacosWindow(
@@ -97,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           top: Image.asset(
             'assets/images/superidea_logo.png',
             height: 100,
-            fit:BoxFit.fitHeight,
+            fit: BoxFit.fitHeight,
           ),
           decoration: BoxDecoration(color: MacosColors.controlColor.darkColor),
           builder: (BuildContext context, ScrollController scrollController) {
@@ -117,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SidebarItem(
                   leading: const MacosIcon(EvaIcons.menu_2),
                   label: Text('Menu'.i18n),
-                  trailing: const Text('2'),
+                  trailing: const Text('4'),
                 ),
                 SidebarItem(
                   leading: const MacosIcon(LineAwesome.tag_solid),
@@ -226,9 +232,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           )),
-      child: [
-        const ArticlePage(),
-      ][pageIndex],
+      child: PageTransitionSwitcher(
+        transitionBuilder: (child, animation, secondaryAnimation) {
+          return FadeThroughTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: pageList[pageIndex],
+      ),
     );
   }
 

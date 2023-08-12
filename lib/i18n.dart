@@ -30,7 +30,7 @@ extension Localization on String {
       {"en": "Login", "zh": "登录"} +
       {"en": "Register", "zh": "注册"} +
       {"en": "Logout", "zh": "登出"} +
-      {"en": "Home", "zh": "首页"} +
+      {"en": "Homepage", "zh": "首页"} +
       {"en": "Settings", "zh": "设置"} +
       {"en": "Preview", "zh": "预览"} +
       {"en": "Sync", "zh": "同步"} +
@@ -55,6 +55,24 @@ extension Localization on String {
       {
         "en": "Selected",
         "zh": "已选",
+      } +
+      {"en": "Close", "zh": "关闭"} +
+      {
+        "en": "Cancel",
+        "zh": "取消",
+      } +
+      {"en": "Name", "zh": "名称"} +
+      {"en": "Internal", "zh": "内部"} +
+      {"en": "External", "zh": "外部"} +
+      {"en": "Link", "zh": "链接"} +
+      {"en": "Input or Select from below", "zh": "输入或从下面选择"} +
+      {
+        "en": "Archives",
+        "zh": "归档",
+      } +
+      {
+        "en": "Tags",
+        "zh": "标签",
       };
 
   String get i18n => localize(this, _t);

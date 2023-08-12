@@ -12,20 +12,35 @@ class AppTheme extends ChangeNotifier {
 
 const primaryColor = Color.fromRGBO(255, 76, 27, 1);
 
-final lightTheme = MacosThemeData(
-  brightness: Brightness.light,
+// final lightTheme = MacosThemeData(
+//   brightness: Brightness.light,
+//   primaryColor: primaryColor,
+//   iconTheme: const MacosIconThemeData(
+//     color: primaryColor,
+//     size: 20,
+//   ),
+//   pulldownButtonTheme: const MacosPulldownButtonThemeData(
+//     iconColor: primaryColor,
+//   ),
+// );
+final lightTheme = MacosThemeData.light().copyWith(
   primaryColor: primaryColor,
-  iconTheme: const MacosIconThemeData(
+  iconTheme: const MacosIconThemeData().copyWith(color: primaryColor),
+  pushButtonTheme: const PushButtonThemeData().copyWith(
     color: primaryColor,
-    size: 20,
+  ),
+  pulldownButtonTheme: const MacosPulldownButtonThemeData().copyWith(
+    iconColor: primaryColor,
   ),
 );
 
-final darkTheme = MacosThemeData(
-  brightness: Brightness.dark,
+final darkTheme = MacosThemeData.dark().copyWith(
   primaryColor: primaryColor,
-  iconTheme: const MacosIconThemeData(
+  iconTheme: const MacosIconThemeData().copyWith(color: primaryColor),
+  pushButtonTheme: const PushButtonThemeData().copyWith(
     color: primaryColor,
-    size: 20,
+  ),
+  pulldownButtonTheme: const MacosPulldownButtonThemeData().copyWith(
+    iconColor: primaryColor,
   ),
 );
