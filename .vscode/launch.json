@@ -9,6 +9,16 @@
                 "-d",
                 "macos"
             ]
+        },
+                {
+            "name": "flutter_application(Web)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-d",
+                "chrome"
+            ]
         }
+
     ]
 }

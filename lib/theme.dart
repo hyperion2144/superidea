@@ -12,17 +12,6 @@ class AppTheme extends ChangeNotifier {
 
 const primaryColor = Color.fromRGBO(255, 76, 27, 1);
 
-// final lightTheme = MacosThemeData(
-//   brightness: Brightness.light,
-//   primaryColor: primaryColor,
-//   iconTheme: const MacosIconThemeData(
-//     color: primaryColor,
-//     size: 20,
-//   ),
-//   pulldownButtonTheme: const MacosPulldownButtonThemeData(
-//     iconColor: primaryColor,
-//   ),
-// );
 final lightTheme = MacosThemeData.light().copyWith(
   primaryColor: primaryColor,
   iconTheme: const MacosIconThemeData().copyWith(color: primaryColor),
@@ -44,3 +33,10 @@ final darkTheme = MacosThemeData.dark().copyWith(
     iconColor: primaryColor,
   ),
 );
+
+Color toolbarIconColor(BuildContext context) {
+  return MacosTheme.brightnessOf(context).resolve(
+    const Color.fromRGBO(0, 0, 0, 0.5),
+    const Color.fromRGBO(255, 255, 255, 0.5),
+  );
+}

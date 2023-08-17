@@ -1,18 +1,24 @@
+import 'dart:io' as io;
+
 import 'package:animations/animations.dart';
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:superidea/pages/article_page.dart';
-import 'package:superidea/pages/menu_page.dart';
-import 'package:superidea/theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:i18n_extension/i18n_widget.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'dart:io' as io;
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:superidea/i18n.dart';
+import 'package:superidea/pages/article_page.dart';
+import 'package:superidea/pages/menu_page.dart';
+import 'package:superidea/pages/tag_page.dart';
+import 'package:superidea/plugins/cubit/document_appearance_cubit.dart';
+import 'package:superidea/theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'i18n.dart';
+
 
 /// This method initializes macos_window_utils and styles the window.
 Future<void> _configureMacosWindowUtils() async {
@@ -26,7 +32,7 @@ Future<void> main() async {
 
   WindowOptions windowOptions = const WindowOptions(
     size: Size(1200, 800),
-    minimumSize: Size(800, 600),
+    minimumSize: Size(1000, 600),
     center: false,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -53,27 +59,35 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => AppTheme(),
-        builder: (context, _) {
-          final appTheme = context.watch<AppTheme>();
-          return MacosApp(
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('zh'),
-            ],
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: appTheme.mode,
-            debugShowCheckedModeBanner: false,
-            home: I18n(child: const MyHomePage()),
-          );
-        });
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DocumentAppearanceCubit>(
+          create: (_) => DocumentAppearanceCubit()..fetch(),
+        ),
+      ],
+      child: ChangeNotifierProvider(
+          create: (context) => AppTheme(),
+          builder: (context, _) {
+            final appTheme = context.watch<AppTheme>();
+            return MacosApp(
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                AppFlowyEditorLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en'),
+                Locale('zh'),
+              ],
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: appTheme.mode,
+              debugShowCheckedModeBanner: false,
+              home: I18n(child: const MyHomePage()),
+            );
+          }),
+    );
   }
 }
 
@@ -92,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> pageList = <Widget>[
     const ArticlePage(),
     const MenuPage(),
+    const TagPage(),
   ];
 
   @override

@@ -34,10 +34,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  ffi: ^2.0.1
-  flutter_rust_bridge: ^1.45.0
-  meta: ^1.8.0
+  cupertino_icons: ^1.0.5
+  ffi: ^2.1.0
+  flutter_rust_bridge: ^1.80.1
+  meta: ^1.9.1
   uuid: ^3.0.7
   macos_ui: ^2.0.0
   i18n_extension: ^9.0.2
@@ -49,9 +49,20 @@ dependencies:
   flutter_svg: ^2.0.7
   provider: ^6.0.5
   toggle_switch: ^2.1.0
-  dropdown_button2: ^2.3.7
+  dropdown_button2: ^2.3.8
   flutter_reorderable_list: ^1.3.1
-
+  path_provider: ^2.1.0
+  markdown: ^7.1.1
+  path: ^1.8.3
+  markdown_widget: ^2.2.0
+  flutter_highlight: ^0.7.0
+  highlight: ^0.7.0
+  appflowy_editor: ^1.2.3
+  bloc: ^8.1.2
+  google_fonts: ^5.1.0
+  shared_preferences: ^2.1.1
+  collection: ^1.17.1
+  flutter_bloc: ^8.1.3
 
 dev_dependencies:
   flutter_test:
@@ -77,11 +88,11 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/google_fonts/
     - assets/images/superidea_logo.svg
-    - assets/images/superidea_cover.svg
     - assets/images/superidea_logo.png
     - assets/images/superidea_cover.jpeg
-
+    - assets/data/default_text.txt
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -93,15 +104,5 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: SFPro
-  #     fonts:
-  #       - asset: assets/fonts/SF-Pro.ttf
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

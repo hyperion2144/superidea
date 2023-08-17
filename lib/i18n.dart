@@ -73,6 +73,39 @@ extension Localization on String {
       {
         "en": "Tags",
         "zh": "标签",
+      } +
+      {
+        "en": "Warning",
+        "zh": "警告",
+      } +
+      {
+        "en":
+            "After deletion, it cannot be undone. Are you sure you want to delete it?",
+        "zh": "删除后不可撤销，你确定要删除吗？",
+      } +
+      {
+        "en": "Delete",
+        "zh": "删除",
+      } +
+      {
+        "en": "Back",
+        "zh": "返回",
+      } +
+      {
+        "en": "Draft",
+        "zh": "草稿",
+      } +
+      {
+        "en": "Title",
+        "zh": "标题",
+      } +
+      {
+        "en": "Start writing...",
+        "zh": "开始写作...",
+      } +
+      {
+        "en": "Heading",
+        "zh": "标题",
       };
 
   String get i18n => localize(this, _t);

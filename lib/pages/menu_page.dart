@@ -7,6 +7,7 @@ import 'package:superidea/i18n.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:superidea/theme.dart';
 import 'package:superidea/widgets/side_sheet.dart';
+import 'package:superidea/widgets/warn_modal.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class MenuPage extends StatefulWidget {
@@ -18,8 +19,8 @@ class MenuPage extends StatefulWidget {
 
 enum LinkKind { internal, external }
 
-class ItemData {
-  ItemData(
+class _ItemData {
+  _ItemData(
     this.title,
     this.key,
     this.kind,
@@ -35,31 +36,31 @@ class ItemData {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  late List<ItemData> _items;
+  late List<_ItemData> _items;
   final _formkey = GlobalKey<FormState>();
 
   _MenuPageState() {
     // TODO: Get item data from database.
     _items = [
-      ItemData(
+      _ItemData(
         'Homepage'.i18n,
         const Key('/'),
         LinkKind.internal,
         '/',
       ),
-      ItemData(
+      _ItemData(
         'Archives'.i18n,
         const Key('/archives'),
         LinkKind.internal,
         '/archives',
       ),
-      ItemData(
+      _ItemData(
         'About'.i18n,
         const Key('/post/about'),
         LinkKind.internal,
         '/post/about',
       ),
-      ItemData(
+      _ItemData(
         'Tags'.i18n,
         const Key('/tags'),
         LinkKind.internal,
@@ -75,7 +76,7 @@ class _MenuPageState extends State<MenuPage> {
 
   // Returns index of item with given key
   int _indexOfKey(Key key) {
-    return _items.indexWhere((ItemData d) => d.key == key);
+    return _items.indexWhere((_ItemData d) => d.key == key);
   }
 
   bool _reorderCallback(Key item, Key newPosition) {
@@ -155,6 +156,7 @@ class _MenuPageState extends State<MenuPage> {
                             key: item.key,
                             childBuilder: (context, state) {
                               return Material(
+                                color: MacosColors.transparent,
                                 child: Opacity(
                                   opacity:
                                       state == ReorderableItemState.placeholder
@@ -218,9 +220,14 @@ class _MenuPageState extends State<MenuPage> {
                                       icon: const MacosIcon(
                                           LineAwesome.trash_solid),
                                       onPressed: () {
-                                        setState(() {
-                                          _items.remove(item);
-                                        });
+                                        showWarnModal(
+                                          context,
+                                          () {
+                                            setState(() {
+                                              _items.remove(item);
+                                            });
+                                          },
+                                        );
                                       },
                                     ),
                                     onTap: () {
@@ -314,7 +321,7 @@ class MenuForm extends StatelessWidget {
               const SizedBox(height: 10),
               SizedBox(
                 height: 30,
-                child: TextField(
+                child: TextFormField(
                   decoration: inputDecoration,
                 ),
               ),
@@ -336,7 +343,7 @@ class MenuForm extends StatelessWidget {
               const SizedBox(height: 10),
               SizedBox(
                 height: 30,
-                child: TextField(
+                child: TextFormField(
                   decoration: inputDecoration.copyWith(
                     hintText: 'Input or Select from below'.i18n,
                     hintStyle: const TextStyle(fontSize: 14),
