@@ -19,7 +19,6 @@ import 'package:superidea/plugins/cubit/document_appearance_cubit.dart';
 import 'package:superidea/theme.dart';
 import 'package:window_manager/window_manager.dart';
 
-
 /// This method initializes macos_window_utils and styles the window.
 Future<void> _configureMacosWindowUtils() async {
   const config = MacosWindowUtilsConfig();

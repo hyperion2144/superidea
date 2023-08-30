@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:appflowy_editor/appflowy_editor.dart'
-    hide formatSignToHeading, HeadingBlockComponentBuilder;
+import 'package:appflowy_editor/appflowy_editor.dart' hide pasteCommand;
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,10 @@ import 'package:superidea/i18n.dart';
 import 'package:superidea/plugins/editor_plugins/code_block/code_block_component.dart';
 import 'package:superidea/plugins/editor_plugins/code_block/code_block_shortcut_event.dart';
 import 'package:superidea/plugins/editor_plugins/editor_style.dart';
-import 'package:superidea/plugins/editor_plugins/heading_block/heading_character_shortcut.dart';
-import 'package:superidea/plugins/editor_plugins/heading_block/heading_component_block_builder.dart';
 import 'package:superidea/theme.dart';
 import 'package:superidea/widgets/warn_modal.dart';
+
+import '../plugins/editor_plugins/shortcut/paste_command.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage({super.key});
@@ -61,7 +60,7 @@ class _ArticlePageState extends State<ArticlePage>
         return _ArticleEditorPage(
           styleCustomizer: EditorStyleCustomizer(
             context: context,
-            padding: const EdgeInsets.all(0),
+            padding: const EdgeInsets.all(10),
             config: MarkdownConfig.defaultConfig,
           ),
         );
@@ -489,6 +488,7 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
 
   final List<CommandShortcutEvent> commandShortcutEvents = [
     ...codeBlockCommands,
+    pasteCommand,
     ...standardCommandShortcutEvents,
   ];
 
@@ -497,7 +497,7 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
 
   List<CharacterShortcutEvent> get characterShortcutEvents => [
         ...codeBlockCharacterEvents,
-        formatSignToHeading,
+        // formatSignToHeading,
         ...standardCharacterShortcutEvents,
       ];
 
@@ -575,13 +575,13 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
                                   color: MacosColors.placeholderTextColor),
                         ),
                         style: MacosTheme.of(context).typography.largeTitle,
+                        cursorColor: primaryColor,
                       ),
                     ),
                     Expanded(
                       child: SizedBox(
                         width: 800,
                         child: AppFlowyEditor(
-                          autoFocus: true,
                           scrollController: scrollController,
                           editorState: EditorState(
                             document: Document.blank(withInitialText: true),
@@ -608,13 +608,13 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
   Map<String, BlockComponentBuilder> _customBlockComponentBuilders() {
     final customBlockComponents = {
       ...standardBlockComponentBuilderMap,
-      HeadingBlockKeys.type: HeadingBlockComponentBuilder2(
-        configuration: standardBlockComponentConfiguration.copyWith(
-          placeholderText: (node) =>
-              '${'Heading'.i18n}${node.attributes[HeadingBlockKeys.level]}',
-        ),
-        textStyleBuilder: (level) => styleCustomizer.headingStyleBuilder(level),
-      ),
+      HeadingBlockKeys.type: HeadingBlockComponentBuilder(
+          textStyleBuilder: (level) =>
+              styleCustomizer.headingStyleBuilder(level),
+          configuration: standardBlockComponentConfiguration.copyWith(
+            placeholderText: (node) =>
+                '${'Heading'.i18n} ${node.attributes[HeadingBlockKeys.level]}',
+          )),
       CodeBlockKeys.type: CodeBlockComponentBuilder(
         configuration: standardBlockComponentConfiguration.copyWith(
           textStyle: (_) => styleCustomizer.codeBlockStyleBuilder(),

@@ -35,7 +35,7 @@ class MarkdownController extends TextEditingController {
       children.add(
         TextSpan(
           text: line,
-          style: TextStyle(
+          style: const TextStyle(
             textBaseline: TextBaseline.alphabetic,
             decoration: TextDecoration.lineThrough,
             decorationColor: MacosColors.controlColor,

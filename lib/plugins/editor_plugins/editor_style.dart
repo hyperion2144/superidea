@@ -159,8 +159,7 @@ class EditorStyleCustomizer {
   }
 
   FloatingToolbarStyle floatingToolbarStyleBuilder() {
-    final theme = MacosTheme.of(context);
-    return FloatingToolbarStyle(
+    return const FloatingToolbarStyle(
       backgroundColor: MacosColors.controlBackgroundColor,
     );
   }
@@ -173,8 +172,8 @@ class EditorStyleCustomizer {
       return GoogleFonts.getFont(
         fontFamily,
         fontWeight: fontWeight,
-        wordSpacing: 5,
-        letterSpacing: 2,
+        wordSpacing: 2,
+        letterSpacing: 1.2,
       );
     } on Exception {
       return GoogleFonts.getFont(

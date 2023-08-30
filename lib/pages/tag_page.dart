@@ -1,9 +1,5 @@
-import 'dart:ui';
-
-import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:superidea/i18n.dart';
 import 'package:superidea/theme.dart';
