@@ -2,6 +2,8 @@ import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:superidea/plugins/editor_plugins/code_block/code_block_component.dart';
 
+import '../patterns.dart';
+
 final List<CharacterShortcutEvent> codeBlockCharacterEvents = [
   enterInCodeBlock,
   startCodeBlock,
@@ -24,17 +26,14 @@ final CharacterShortcutEvent startCodeBlock = CharacterShortcutEvent(
       editorState,
       (node) => node.type != CodeBlockKeys.type,
       (_, text, selection) {
-        final characters = text.split('');
-        // only supports heading1 to heading6 levels
-        // if the characters is empty, the every function will return true directly
-        return characters.isNotEmpty &&
-            characters.every((element) => element == '`') &&
-            characters.length == 3;
+        return codeFencePattern.hasMatch(text);
       },
       (text, node, delta) {
         final numberOfSign = text.split('').length;
+        final match = codeFencePattern.firstMatch(text);
         return codeBlockNode(
           delta: delta.compose(Delta()..delete(numberOfSign)),
+          language: match?[3] ?? 'auto',
         );
       },
     );
@@ -137,8 +136,10 @@ final CommandShortcutEvent deleteCodeBlockCommand = CommandShortcutEvent(
       transaction.deleteNode(node);
 
       editorState.apply(transaction);
-    } else {
+    } else if (selection.startIndex == selection.endIndex) {
       editorState.deleteBackward();
+    } else {
+      editorState.deleteSelection(selection);
     }
 
     return KeyEventResult.handled;

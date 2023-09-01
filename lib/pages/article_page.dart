@@ -10,6 +10,8 @@ import 'package:superidea/i18n.dart';
 import 'package:superidea/plugins/editor_plugins/code_block/code_block_component.dart';
 import 'package:superidea/plugins/editor_plugins/code_block/code_block_shortcut_event.dart';
 import 'package:superidea/plugins/editor_plugins/editor_style.dart';
+import 'package:superidea/plugins/editor_plugins/heading_block/heading_block_ccomponent.dart';
+import 'package:superidea/plugins/editor_plugins/heading_block/heading_character_shortcut.dart';
 import 'package:superidea/theme.dart';
 import 'package:superidea/widgets/warn_modal.dart';
 
@@ -497,7 +499,7 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
 
   List<CharacterShortcutEvent> get characterShortcutEvents => [
         ...codeBlockCharacterEvents,
-        // formatSignToHeading,
+        formatSignToHeading2,
         ...standardCharacterShortcutEvents,
       ];
 
@@ -608,7 +610,7 @@ class __ArticleEditorPageState extends State<_ArticleEditorPage> {
   Map<String, BlockComponentBuilder> _customBlockComponentBuilders() {
     final customBlockComponents = {
       ...standardBlockComponentBuilderMap,
-      HeadingBlockKeys.type: HeadingBlockComponentBuilder(
+      HeadingBlockKeys.type: HeadingBlockComponentBuilder2(
           textStyleBuilder: (level) =>
               styleCustomizer.headingStyleBuilder(level),
           configuration: standardBlockComponentConfiguration.copyWith(

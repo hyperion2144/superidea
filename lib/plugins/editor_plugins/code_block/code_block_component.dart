@@ -249,7 +249,11 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
 
   Widget _buildSwitchLanguageButton(BuildContext context) {
     return MacosPopupButton(
-      value: language ?? 'auto',
+      value: language != null
+          ? languages.contains(language)
+              ? language
+              : 'auto'
+          : 'auto',
       items: languages
           .map((e) => MacosPopupMenuItem(
                 key: Key(e),

@@ -1,6 +1,8 @@
 import 'package:appflowy_editor/appflowy_editor.dart' hide formatMarkdownSymbol;
 import 'package:superidea/plugins/editor_plugins/base/markdow_format.dart';
 
+import '../patterns.dart';
+
 /// Convert '# ' to bulleted list
 ///
 /// - support
@@ -8,7 +10,7 @@ import 'package:superidea/plugins/editor_plugins/base/markdow_format.dart';
 ///   - mobile
 ///   - web
 ///
-CharacterShortcutEvent formatSignToHeading = CharacterShortcutEvent(
+CharacterShortcutEvent formatSignToHeading2 = CharacterShortcutEvent(
   key: 'format sign to heading list',
   character: ' ',
   handler: (editorState) async => await formatMarkdownSymbol(
@@ -16,22 +18,14 @@ CharacterShortcutEvent formatSignToHeading = CharacterShortcutEvent(
     false,
     (node) => true,
     (_, text, selection) {
-      final characters = text.split('');
-      // only supports heading1 to heading6 levels
-      // if the characters is empty, the every function will return true directly
-      return characters.isNotEmpty &&
-          characters.every((element) => element == '#') &&
-          characters.length < 7;
+      return headerPattern.hasMatch('$text ');
     },
     (text, node, delta) {
-      final numberOfSign = text.split('').length;
+      final match = headerPattern.firstMatch('$text ');
       return headingNode(
-        level: numberOfSign,
-        delta: Delta()
-          ..insert('$text ')
-          ..toPlainText(),
+        level: match?[1] == null ? 1 : match![1]!.length,
+        delta: delta.compose(Delta()..delete(text.split('').length)),
       );
     },
   ),
 );
-
