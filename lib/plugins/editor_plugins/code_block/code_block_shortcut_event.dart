@@ -15,7 +15,7 @@ final List<CommandShortcutEvent> codeBlockCommands = [
   tabToInsertSpacesInCodeBlockCommand,
   tabToDeleteSpacesInCodeBlockCommand,
   selectAllInCodeBlockCommand,
-  deleteCodeBlockCommand,
+  // deleteCodeBlockCommand,
 ];
 
 final CharacterShortcutEvent startCodeBlock = CharacterShortcutEvent(
@@ -29,10 +29,8 @@ final CharacterShortcutEvent startCodeBlock = CharacterShortcutEvent(
         return codeFencePattern.hasMatch(text);
       },
       (text, node, delta) {
-        final numberOfSign = text.split('').length;
         final match = codeFencePattern.firstMatch(text);
         return codeBlockNode(
-          delta: delta.compose(Delta()..delete(numberOfSign)),
           language: match?[3] ?? 'auto',
         );
       },
@@ -222,9 +220,10 @@ CommandShortcutEventHandler _insertNewParagraphNextToCodeBlockCommandHandler =
         },
       ),
     )
-    ..afterSelection = Selection.collapse(
-      selection.end.path.next,
-      0,
+    ..afterSelection = Selection.collapsed(
+      Position(
+        path: selection.end.path.next,
+      ),
     );
   editorState.apply(transaction);
   return KeyEventResult.handled;
@@ -253,9 +252,11 @@ CommandShortcutEventHandler _tabToInsertSpacesInCodeBlockCommandHandler =
           index,
           spaces, // two spaces
         )
-        ..afterSelection = Selection.collapse(
-          selection.end.path,
-          selection.endIndex + spaces.length,
+        ..afterSelection = Selection.collapsed(
+          Position(
+            path: selection.end.path,
+            offset: selection.endIndex + spaces.length,
+          ),
         );
       editorState.apply(transaction);
       break;
@@ -289,9 +290,11 @@ CommandShortcutEventHandler _tabToDeleteSpacesInCodeBlockCommandHandler =
             index,
             spaces.length, // two spaces
           )
-          ..afterSelection = Selection.collapse(
-            selection.end.path,
-            selection.endIndex - spaces.length,
+          ..afterSelection = Selection.collapsed(
+            Position(
+              path: selection.end.path,
+              offset: selection.endIndex - spaces.length,
+            ),
           );
         editorState.apply(transaction);
       }

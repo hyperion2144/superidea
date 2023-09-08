@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../markdown/document_markdown.dart';
 
-final CommandShortcutEvent pasteCommand = CommandShortcutEvent(
+final CommandShortcutEvent customPasteCommand = CommandShortcutEvent(
   key: 'paste the content',
   command: 'ctrl+v',
   macOSCommand: 'cmd+v',

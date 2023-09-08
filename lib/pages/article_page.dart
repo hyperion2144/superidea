@@ -5,17 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:superidea/i18n.dart';
-import 'package:superidea/plugins/editor_plugins/code_block/code_block_component.dart';
-import 'package:superidea/plugins/editor_plugins/code_block/code_block_shortcut_event.dart';
+import 'package:superidea/pages/article_editor_page.dart';
 import 'package:superidea/plugins/editor_plugins/editor_style.dart';
-import 'package:superidea/plugins/editor_plugins/heading_block/heading_block_ccomponent.dart';
-import 'package:superidea/plugins/editor_plugins/heading_block/heading_character_shortcut.dart';
 import 'package:superidea/theme.dart';
 import 'package:superidea/widgets/warn_modal.dart';
-
-import '../plugins/editor_plugins/shortcut/paste_command.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage({super.key});
@@ -25,16 +19,6 @@ class ArticlePage extends StatefulWidget {
 }
 
 class _ItemData {
-  final Key key;
-  final String title;
-  final String url;
-  final bool published;
-  final DateTime createAt;
-  final bool hide;
-  final bool top;
-  final Image? cover;
-  final List<String> tags;
-
   _ItemData(
     this.title,
     this.published,
@@ -46,49 +30,87 @@ class _ItemData {
     this.key,
     this.url,
   );
+
+  final Image? cover;
+  final DateTime createAt;
+  final bool hide;
+  final Key key;
+  final bool published;
+  final List<String> tags;
+  final String title;
+  final bool top;
+  final String url;
 }
 
-class _ArticlePageState extends State<ArticlePage>
-    with SingleTickerProviderStateMixin {
+class _ArticlePageState extends State<ArticlePage> {
+  int pageIndex = 0;
+
+  late List<Widget> pages;
+
+  @override
+  void initState() {
+    pages = [
+      ArticleListPage(openContainer: () {
+        setState(() {
+          pageIndex = 1;
+        });
+
+        final scope = MacosWindowScope.of(context);
+        if (scope.isSidebarShown) {
+          scope.toggleSidebar();
+        }
+      }),
+      ArticleEditorPage(
+        closeContainer: () {
+          setState(() {
+            pageIndex = 0;
+          });
+
+          MacosWindowScope.of(context).toggleSidebar();
+        },
+        styleCustomizer: EditorStyleCustomizer(
+          context: context,
+          padding: const EdgeInsets.all(10),
+        ),
+        editorState: EditorState(
+          document: Document.blank(withInitialText: true),
+        ),
+      )
+    ];
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-      transitionType: ContainerTransitionType.fade,
-      tappable: false,
-      closedBuilder: (context, openContainer) {
-        return _ArticleListPage(openContainer: openContainer);
-      },
-      openBuilder: (context, _) {
-        return _ArticleEditorPage(
-          styleCustomizer: EditorStyleCustomizer(
-            context: context,
-            padding: const EdgeInsets.all(10),
-            config: MarkdownConfig.defaultConfig,
-          ),
+    return PageTransitionSwitcher(
+      transitionBuilder: (child, animation, secondaryAnimation) {
+        return FadeTransition(
+          opacity: animation,
+          // animation: animation,
+          // secondaryAnimation: secondaryAnimation,
+          child: child,
         );
       },
+      child: pages[pageIndex],
     );
   }
 }
 
-class _ArticleListPage extends StatefulWidget {
-  final VoidCallback openContainer;
-
-  const _ArticleListPage({
+class ArticleListPage extends StatefulWidget {
+  const ArticleListPage({
+    super.key,
     required this.openContainer,
   });
 
+  final VoidCallback openContainer;
+
   @override
-  State<_ArticleListPage> createState() => _ArticleListPageState();
+  State<ArticleListPage> createState() => _ArticleListPageState();
 }
 
-class _ArticleListPageState extends State<_ArticleListPage>
+class _ArticleListPageState extends State<ArticleListPage>
     with SingleTickerProviderStateMixin {
-  late List<_ItemData> _items;
-  late AnimationController _controller;
-
-  final List<_ItemData> _selectedItems = [];
-
   _ArticleListPageState() {
     // TODO: Get item data from database.
     _items = [
@@ -117,6 +139,16 @@ class _ArticleListPageState extends State<_ArticleListPage>
     ];
   }
 
+  late AnimationController _controller;
+  late List<_ItemData> _items;
+  final List<_ItemData> _selectedItems = [];
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -133,12 +165,6 @@ class _ArticleListPageState extends State<_ArticleListPage>
           // the latest value of [_controller.status].
         });
       });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -219,7 +245,7 @@ class _ArticleListPageState extends State<_ArticleListPage>
             inToolbarBuilder: (context) {
               return Visibility(
                 visible: _controller.status == AnimationStatus.dismissed,
-                child: Tooltip(
+                child: MacosTooltip(
                   message: searchTitle,
                   child: MacosIconButton(
                     icon: MacosIconTheme(
@@ -262,7 +288,6 @@ class _ArticleListPageState extends State<_ArticleListPage>
                       },
                       child: MacosTextField(
                         autofocus: true,
-                        autocorrect: true,
                         placeholder: searchTitle,
                         suffix: const MacosIcon(CupertinoIcons.search),
                       ),
@@ -276,10 +301,8 @@ class _ArticleListPageState extends State<_ArticleListPage>
           ToolBarIconButton(
             label: newTitle,
             showLabel: false,
-            icon: Tooltip(
-              message: newTitle,
-              child: const MacosIcon(CupertinoIcons.add),
-            ),
+            icon: const MacosIcon(CupertinoIcons.add),
+            tooltipMessage: newTitle,
             onPressed: widget.openContainer,
           ),
         ],
@@ -471,160 +494,5 @@ class _ArticleTileState extends State<_ArticleTile> {
         ),
       ),
     );
-  }
-}
-
-class _ArticleEditorPage extends StatefulWidget {
-  final EditorStyleCustomizer styleCustomizer;
-
-  const _ArticleEditorPage({
-    required this.styleCustomizer,
-  });
-
-  @override
-  State<_ArticleEditorPage> createState() => __ArticleEditorPageState();
-}
-
-class __ArticleEditorPageState extends State<_ArticleEditorPage> {
-  EditorStyleCustomizer get styleCustomizer => widget.styleCustomizer;
-
-  final List<CommandShortcutEvent> commandShortcutEvents = [
-    ...codeBlockCommands,
-    pasteCommand,
-    ...standardCommandShortcutEvents,
-  ];
-
-  late final Map<String, BlockComponentBuilder> blockComponentBuilders =
-      _customBlockComponentBuilders();
-
-  List<CharacterShortcutEvent> get characterShortcutEvents => [
-        ...codeBlockCharacterEvents,
-        formatSignToHeading2,
-        ...standardCharacterShortcutEvents,
-      ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: ToolBar(
-        leading: const SizedBox.shrink(),
-        actions: [
-          ToolBarIconButton(
-            label: 'Back'.i18n,
-            icon: Tooltip(
-              message: 'Back'.i18n,
-              child: const MacosIcon(CupertinoIcons.arrow_left),
-            ),
-            showLabel: false,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          ToolBarIconButton(
-            label: 'Draft'.i18n,
-            icon: Tooltip(
-              message: 'Draft'.i18n,
-              child: const MacosIcon(Iconsax.tick_circle),
-            ),
-            showLabel: false,
-            onPressed: () {
-              // TODO: save as draft.
-            },
-          ),
-          ToolBarIconButton(
-            label: 'Save'.i18n,
-            icon: Tooltip(
-              message: 'Save'.i18n,
-              child: const MacosIcon(
-                Iconsax.tick_circle,
-                color: MacosColors.systemGreenColor,
-              ),
-            ),
-            showLabel: false,
-            onPressed: () {
-              // TODO: Save article.
-            },
-          ),
-        ],
-      ),
-      children: [
-        ContentArea(
-          builder: (context, scrollController) {
-            return Row(
-              children: [
-                const Spacer(),
-                Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 800,
-                      height: 40,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          hintText: 'Title'.i18n,
-                          hintStyle: MacosTheme.of(context)
-                              .typography
-                              .largeTitle
-                              .copyWith(
-                                  color: MacosColors.placeholderTextColor),
-                        ),
-                        style: MacosTheme.of(context).typography.largeTitle,
-                        cursorColor: primaryColor,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        width: 800,
-                        child: AppFlowyEditor(
-                          scrollController: scrollController,
-                          editorState: EditorState(
-                            document: Document.blank(withInitialText: true),
-                          ),
-                          editorStyle: styleCustomizer.style(),
-                          blockComponentBuilders:
-                              _customBlockComponentBuilders(),
-                          characterShortcutEvents: characterShortcutEvents,
-                          commandShortcutEvents: commandShortcutEvents,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-              ],
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Map<String, BlockComponentBuilder> _customBlockComponentBuilders() {
-    final customBlockComponents = {
-      ...standardBlockComponentBuilderMap,
-      HeadingBlockKeys.type: HeadingBlockComponentBuilder2(
-          textStyleBuilder: (level) =>
-              styleCustomizer.headingStyleBuilder(level),
-          configuration: standardBlockComponentConfiguration.copyWith(
-            placeholderText: (node) =>
-                '${'Heading'.i18n} ${node.attributes[HeadingBlockKeys.level]}',
-          )),
-      CodeBlockKeys.type: CodeBlockComponentBuilder(
-        configuration: standardBlockComponentConfiguration.copyWith(
-          textStyle: (_) => styleCustomizer.codeBlockStyleBuilder(),
-        ),
-      ),
-      ImageBlockKeys.type: ImageBlockComponentBuilder(),
-    };
-
-    return customBlockComponents;
   }
 }

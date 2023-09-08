@@ -248,22 +248,25 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
   }
 
   Widget _buildSwitchLanguageButton(BuildContext context) {
-    return MacosPopupButton(
-      value: language != null
-          ? languages.contains(language)
-              ? language
-              : 'auto'
-          : 'auto',
-      items: languages
-          .map((e) => MacosPopupMenuItem(
-                key: Key(e),
-                value: e,
-                child: Text(e.capitalize()),
-              ))
-          .toList(),
-      onChanged: (value) {
-        updateLanguage(value ?? 'auto');
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MacosPopupButton(
+        value: language != null
+            ? languages.contains(language)
+                ? language
+                : 'auto'
+            : 'auto',
+        items: languages
+            .map((e) => MacosPopupMenuItem(
+                  key: Key(e),
+                  value: e,
+                  child: Text(e.capitalize()),
+                ))
+            .toList(),
+        onChanged: (value) {
+          updateLanguage(value ?? 'auto');
+        },
+      ),
     );
   }
 
@@ -272,9 +275,11 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
       ..updateNode(node, {
         CodeBlockKeys.language: language == 'auto' ? null : language,
       })
-      ..afterSelection = Selection.collapse(
-        node.path,
-        node.delta?.length ?? 0,
+      ..afterSelection = Selection.collapsed(
+        Position(
+          path: node.path,
+          offset: node.delta?.length ?? 0,
+        ),
       );
     await editorState.apply(transaction);
   }

@@ -1,4 +1,5 @@
 {
     "cmake.configureOnOpen": false,
     "commentTranslate.source": "Google",
+    "cmake.sourceDirectory": "/Volumes/DATE/projects/superidea/windows/flutter",
 }

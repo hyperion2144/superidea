@@ -101,12 +101,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
+  int editorPage = 0;
 
-  List<Widget> pageList = <Widget>[
-    const ArticlePage(),
-    const MenuPage(),
-    const TagPage(),
-  ];
+  late List<Widget> pageList;
+
+  @override
+  void initState() {
+    super.initState();
+
+    pageList = [
+      const ArticlePage(),
+      const MenuPage(),
+      const TagPage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,10 +265,5 @@ class _MyHomePageState extends State<MyHomePage> {
         child: pageList[pageIndex],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }

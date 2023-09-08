@@ -4,19 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:superidea/plugins/cubit/document_appearance_cubit.dart';
 
 class EditorStyleCustomizer {
   EditorStyleCustomizer({
     required this.context,
     required this.padding,
-    required this.config,
   });
 
   final BuildContext context;
   final EdgeInsets padding;
-  final MarkdownConfig config;
 
   EditorStyle style() {
     if (PlatformExtension.isDesktopOrWeb) {
@@ -33,7 +30,6 @@ class EditorStyleCustomizer {
     final fontFamily = context.read<DocumentAppearanceCubit>().state.fontFamily;
     return EditorStyle.desktop(
       padding: padding,
-      backgroundColor: MacosColors.windowBackgroundColor,
       cursorColor: theme.primaryColor,
       textStyleConfiguration: TextStyleConfiguration(
         text: baseTextStyle(fontFamily).copyWith(
@@ -77,7 +73,6 @@ class EditorStyleCustomizer {
 
     return EditorStyle.desktop(
       padding: padding,
-      backgroundColor: MacosColors.windowBackgroundColor,
       cursorColor: theme.primaryColor,
       textStyleConfiguration: TextStyleConfiguration(
         text: baseTextStyle(fontFamily).copyWith(
@@ -150,11 +145,11 @@ class EditorStyleCustomizer {
     final theme = MacosTheme.of(context);
     return SelectionMenuStyle(
       selectionMenuBackgroundColor: MacosColors.controlBackgroundColor,
-      selectionMenuItemTextColor: MacosColors.selectedTextBackgroundColor,
+      selectionMenuItemTextColor: MacosColors.controlTextColor,
       selectionMenuItemIconColor: theme.iconTheme.color!,
-      selectionMenuItemSelectedIconColor: MacosColors.selectedMenuItemTextColor,
-      selectionMenuItemSelectedTextColor: MacosColors.selectedMenuItemTextColor,
-      selectionMenuItemSelectedColor: MacosColors.selectedTextColor,
+      selectionMenuItemSelectedIconColor: theme.iconTheme.color!,
+      selectionMenuItemSelectedTextColor: MacosColors.controlTextColor,
+      selectionMenuItemSelectedColor: MacosColors.selectedTextBackgroundColor,
     );
   }
 
