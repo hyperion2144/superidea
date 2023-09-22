@@ -59,7 +59,7 @@ dependencies:
   highlight: ^0.7.0
   appflowy_editor: ^1.2.3
   bloc: ^8.1.2
-  google_fonts: ^5.1.0
+  google_fonts: ^6.1.0
   shared_preferences: ^2.1.1
   collection: ^1.17.1
   flutter_bloc: ^8.1.3
